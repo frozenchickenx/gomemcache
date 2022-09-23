@@ -1,5 +1,7 @@
 ## About
 
+This is a fork from the original project (github.com/bradfitz/gomemcache/memcache)
+
 This is a memcache client library for the Go programming language
 (http://golang.org/).
 
