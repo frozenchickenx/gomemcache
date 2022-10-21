@@ -123,7 +123,7 @@ func New(server ...string) (*Client, error) {
 	ss := new(ServerList)
 	err := ss.SetServers(server...)
 	if err != nil {
-		return &Client{}, err
+		return nil, err
 	}
 	return NewFromSelector(ss), nil
 }
@@ -136,8 +136,11 @@ func NewFromSelector(ss ServerSelector) *Client {
 // NewWithTLS returns a memcache client that uses TLS
 func NewWithTLS(config *tls.Config, server ...string) (*Client, error) {
 	cl, err := New(server...)
+	if err != nil {
+		return nil, err
+	}
 	cl.tls = config
-	return cl, err
+	return cl, nil
 }
 
 // Client is a memcache client.
