@@ -119,10 +119,13 @@ var (
 // New returns a memcache client using the provided server(s)
 // with equal weight. If a server is listed multiple times,
 // it gets a proportional amount of weight.
-func New(server ...string) *Client {
+func New(server ...string) (*Client, error) {
 	ss := new(ServerList)
-	ss.SetServers(server...)
-	return NewFromSelector(ss)
+	err := ss.SetServers(server...)
+	if err != nil {
+		return &Client{}, err
+	}
+	return NewFromSelector(ss), nil
 }
 
 // NewFromSelector returns a new Client using the provided ServerSelector.
@@ -131,10 +134,10 @@ func NewFromSelector(ss ServerSelector) *Client {
 }
 
 // NewWithTLS returns a memcache client that uses TLS
-func NewWithTLS(config *tls.Config, server ...string) *Client {
-	cl := New(server...)
+func NewWithTLS(config *tls.Config, server ...string) (*Client, error) {
+	cl, err := New(server...)
 	cl.tls = config
-	return cl
+	return cl, err
 }
 
 // Client is a memcache client.
